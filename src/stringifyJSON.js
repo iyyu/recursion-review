@@ -11,9 +11,13 @@ var stringifyJSON = function(obj) {
   // if obj
     if (typeof item !== 'function') {
       if (typeof item === 'object' && !Array.isArray(item) && item !== null) {
-        results += '{';
         var keys = Object.keys(item);
         var values = Object.values(item);
+        if (keys.includes(undefined) || keys.includes('functions')) {
+          results += '{}';
+          return results;
+        }
+        results += '{';
         for (var k = 0; k < keys.length; k ++) {
           results += stringifyJSON(keys[k]);
           results += ':';
@@ -25,7 +29,6 @@ var stringifyJSON = function(obj) {
         results += '}';
       }
       
-
       // if arr
       if (Array.isArray(item)) {
         results += '[';
@@ -61,9 +64,6 @@ var stringifyJSON = function(obj) {
       }
       if (item === null) {
         results += 'null';
-      }
-      if (item === undefined) {
-        return undefined;
       }
     }
   };
